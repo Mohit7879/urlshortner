@@ -1,9 +1,11 @@
+const { signup, signin, signOut } = require('../controller/user.js');
+
+
 const router=require('express').Router();
 
-router.get('/',(req,res)=>{
+router.post('/signup',signup);
+router.post('/signin',signin);
+router.get('/signout',signOut);
 
-    res.send('home')
-    
-})
 
 module.exports=router;

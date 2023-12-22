@@ -10,7 +10,9 @@ mongoose.connect(process.env.MONGO)
 }).catch((err)=> {
     console.log(`${err}`);
 })
-
+app.use(express.urlencoded({
+    extended:true,
+}));
 app.use('/api',require('./routes/index.js'))
     
 
@@ -20,4 +22,7 @@ app.listen(port,(err)=>{
         console.log("errrrrrrrr",err);
     }
 })
+
+
+
 
