@@ -2,6 +2,7 @@ const express= require('express');
 const mongoose =require('mongoose');
 const port=3000;
 const app=express();
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const ShortUrl=require('./model/shorturl.js')
 mongoose.connect(process.env.MONGO)
@@ -10,9 +11,12 @@ mongoose.connect(process.env.MONGO)
 }).catch((err)=> {
     console.log(`${err}`);
 })
+
+app.use(cookieParser());
 app.use(express.urlencoded({
     extended:true,
 }));
+
 app.use('/api',require('./routes/index.js'))
 
 app.get('/:shortId', async (req, res) => {
@@ -38,6 +42,10 @@ app.listen(port,(err)=>{
         console.log("errrrrrrrr",err);
     }
 })
+
+
+
+
 
 
 app.use((err,req,res,next)=>{

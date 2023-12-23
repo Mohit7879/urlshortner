@@ -5,10 +5,11 @@ const jwt =require('jsonwebtoken');
 
 module.exports.verifyToken=(req,res,next)=>{
     try{
-   // getting token from authorization header
 
-const token =req.headers['authorization']
-console.log("token",token);""
+   
+   const token =req.cookies.accesstoken
+console.log("token",token);
+
 
 if(!token){
     return next(errorhandler(401,'unauthorised'))

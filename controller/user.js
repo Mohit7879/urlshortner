@@ -46,11 +46,10 @@ module.exports.signin = async (req,res,next)=>{
 
           // create token using jwt
         const token = jwt.sign({id:validUser._id},process.env.JWT_SECRET)
-       
+      
 
-        
-    res.status(200).json(token)
- 
+        //storing token in cookie
+        res.cookie('accesstoken',token,{httpOnly:true}).status(200).json('signin success')
    
     }catch(err){
 
@@ -62,7 +61,7 @@ module.exports.signin = async (req,res,next)=>{
 
 module.exports.signOut= (req,res)=>{
      
-    res.clearCookie('access_token');
+    res.clearCookie('accesstoken');
     res.status(200).json('sign out success');
     return ;
 
