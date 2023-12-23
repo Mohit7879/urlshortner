@@ -6,9 +6,13 @@ Simple api to shorten long url and access the url with shorten url .
 Functionalities
 
 •	Signup users
+     signup using email and password
 •	Signin users
+     signin using email and password
 •	Signout users
+    sign out users
 •	Shorten long urls
+          shorten long urls by providing original url 
 •	Access url using short urls
 
 Endpoints
