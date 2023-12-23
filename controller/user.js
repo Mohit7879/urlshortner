@@ -1,15 +1,19 @@
 const User =  require('../model/user.js')
 const bcrypt = require('bcryptjs');
 const jwt=require('jsonwebtoken')
+const {errorhandler} = require('../utils/errorhandler.js')
 
 
-module.exports.signup=async (req,res)=>{
+module.exports.signup=async (req,res,next)=>{
 
     try{
        
      const { email,password}=req.body;
-   
-    const hashedPassword  = await bcrypt.hash(password, 10);// we can give salt value to 12 to make it safer
+      // hashed the password using bcrypt
+    const hashedPassword  = await bcrypt.hash(password, 10);
+
+
+      // create a user
      User.create({
         email,
         password:hashedPassword,
@@ -19,28 +23,38 @@ module.exports.signup=async (req,res)=>{
 
 }catch(err){
   
-    console.log(err);
+    next(err)
 }
 
 }
 
-module.exports.signin = async (req,res)=>{
+
+
+module.exports.signin = async (req,res,next)=>{
 
     const {email,password}=req.body;
 
     try{
+
+        // find email in database
         const validUser = await User.findOne({email});
-        if(!validUser) return 
+        if(!validUser) return next(errorhandler(404,'User not found '));
+
+        // compare password with databse password using bcrypt
         const validPassword = bcrypt.compareSync(password,validUser.password);
-        if(!validPassword) return 
+        if(!validPassword) return next(errorhandler(401,'Invalid password'))
+
+          // create token using jwt
         const token = jwt.sign({id:validUser._id},process.env.JWT_SECRET)
-        const {password:pass,...rest}=validUser._doc
-    res.cookie('access_token',token,{httpOnly:true}).status(200).json(rest)
-    console.log(rest);
+       
+
+        
+    res.status(200).json(token)
+ 
    
     }catch(err){
 
-         console.log(err);
+       next(err)
      }
 
 
